@@ -3,57 +3,53 @@ import java.util.Stack;
 public class RPLCalc {
     public static String calculate(String expression) {
         //create stack object
-        Stack<String> stack = new Stack<>();
+        Stack<String> numbers = new Stack<>();
+
         //read input
         String[] line = expression.split(" ");
-        //make an array to hold operations for easy logical comparisons
-        final String[] operations = {"+", "-", "*", "/"};
 
         //loop through each element of the input
         for (String element : line) {
             try {
-                //try to push a double; operations will cause an error
-                stack.push(String.valueOf(Double.parseDouble(element)));
+
+                //try to push a double; operations will cause an error, revert to string
+                numbers.push(String.valueOf(Double.parseDouble(element)));
             } catch (NumberFormatException e) {
+
                 //only takes this branch if attempted to push operation
-                for (String s : operations) {
-                    //loop through the operations to ensure that the non-number is a valid operation
-                    if (s.equals(element) && (stack.size() > 1)) {
-                        try {
-                            //put into try for error correction
-                            double second = Double.parseDouble(stack.pop());
-                            double first = Double.parseDouble(stack.pop());
-                            //compare the operation and push the result back onto the stack
-                            switch (s) {
-                                case "+": {
-                                    stack.push(String.valueOf(first + second));
-                                    break;
-                                }
-                                case "-": {
-                                    stack.push(String.valueOf(first - second));
-                                    break;
-                                }
-                                case "*": {
-                                    stack.push(String.valueOf(first * second));
-                                    break;
-                                }
-                                case "/": {
-                                    if (second == 0) {
-                                        second ++;
-                                    }
-                                    stack.push(String.valueOf(first / second));
-                                    break;
-                                }
+                //only runs if
+                if (numbers.size() > 1) {
+
+                    //first pop returns second number since stack is LIFO
+                    double second = Double.parseDouble(numbers.pop()), first = Double.parseDouble(numbers.pop());
+
+                    //compare the operation and push the result back onto the numbers
+                    switch (element) {
+                        case "+": {
+                            numbers.push(String.valueOf(first + second));
+                            break;
+                        }
+                        case "-": {
+                            numbers.push(String.valueOf(first - second));
+                            break;
+                        }
+                        case "*": {
+                            numbers.push(String.valueOf(first * second));
+                            break;
+                        }
+                        case "/": {
+                            //prevent divide by 0 by essentially ignoring the operation
+                            if (second == 0) {
+                                second++;
                             }
-                        } catch (NumberFormatException e1) {
-                            //error if non number is nonvalid operation
-                            System.out.println(e1.getMessage());
+                            numbers.push(String.valueOf(first / second));
+                            break;
                         }
                     }
                 }
             }
         }
         //print out the result
-        return stack.pop();
+        return numbers.pop();
     }
 }

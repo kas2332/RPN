@@ -1,13 +1,14 @@
 import java.util.Stack;
 
 public class RPLCalc {
-    public static void main(String[] args) {
+    public static String calculate(String expression) {
         //create stack object
         Stack<String> stack = new Stack<>();
         //read input
-        String[] line = args[0].split(" ");
+        String[] line = expression.split(" ");
         //make an array to hold operations for easy logical comparisons
         final String[] operations = {"+", "-", "*", "/"};
+
         //loop through each element of the input
         for (String element : line) {
             try {
@@ -17,7 +18,7 @@ public class RPLCalc {
                 //only takes this branch if attempted to push operation
                 for (String s : operations) {
                     //loop through the operations to ensure that the non-number is a valid operation
-                    if (s.equals(element)) {
+                    if (s.equals(element) && (stack.size() > 1)) {
                         try {
                             //put into try for error correction
                             double second = Double.parseDouble(stack.pop());
@@ -37,6 +38,9 @@ public class RPLCalc {
                                     break;
                                 }
                                 case "/": {
+                                    if (second == 0) {
+                                        second ++;
+                                    }
                                     stack.push(String.valueOf(first / second));
                                     break;
                                 }
@@ -50,6 +54,6 @@ public class RPLCalc {
             }
         }
         //print out the result
-        System.out.println(stack.pop());
+        return stack.pop();
     }
 }

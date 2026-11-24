@@ -1,31 +1,25 @@
 public class Generator {
-    public static void main(String[] args) {
+    public static String[] generateString(int numberOfOperations, boolean RPL) {
         //define possible entries
-        String[] operations = {"+", "-", "x", "/"};
-        Integer[] nums = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        String[] operations = {"+", "-", "*", "/"};
+        Double[] nums = {1.0, 2.0, 3.0, 4.0};
         //specific var
         int numsLength = nums.length, operationsLength = operations.length;
-        int numberOfOperations = Integer.parseInt(args[0]);
-        //boolean for RPL or infix
-        boolean RPL = args[1].equals("true");
+        String[] result = new String[2];
+        result[0] = "";
+        result[1] = "";
 
-        if (RPL) {
-            //prints out two random numbers followed by a random operation
-            for (int i = 0; i < numberOfOperations; i++) {
-                StdOut.print(nums[StdRandom.uniformInt(numsLength - 1)] + " ");
-                StdOut.print(nums[StdRandom.uniformInt(numsLength - 1)] + " ");
-                StdOut.print(operations[StdRandom.uniformInt(operationsLength - 1)] + " ");
-            }
-        } else {
-            //prints out a number to start expression
-            StdOut.print(nums[StdRandom.uniformInt(numsLength - 1)] + " ");
-            //prints out an operation and number
-            for (int i = 0; i < numberOfOperations; i++) {
-                StdOut.print(operations[StdRandom.uniformInt(operationsLength - 1)] + " ");
-                StdOut.print(nums[StdRandom.uniformInt(numsLength - 1)] + " ");
-            }
+
+        //prints out two random numbers followed by a random operation
+        double num1 = nums[StdRandom.uniformInt(numsLength)];
+        result[0] += num1 + " ";
+        result[1] += num1 + " ";
+        for (int i = 0; i < numberOfOperations; i++) {
+            double num2 = nums[StdRandom.uniformInt(numsLength)];
+            String op = operations[StdRandom.uniformInt(operationsLength)];
+            result[0] += num2 + " " + op + " ";
+            result[1] += op + " " + num2 + " ";
         }
-
-
+        return result;
     }
 }
